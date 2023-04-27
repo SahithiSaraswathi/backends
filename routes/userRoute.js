@@ -8,6 +8,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const Appointment = require("../models/appointmentModel");
 const moment = require("moment");
 
+
 router.post("/register", async (req, res) => {
   try {
     const userExists = await User.findOne({ email: req.body.email });
@@ -187,7 +188,7 @@ router.post("/delete-all-notifications", authMiddleware, async (req, res) => {
   // }
 });
 
-router.get("/get-all-approved-doctors", async (req, res) => {
+router.get("/get-all-approved-doctors", authMiddleware, async (req, res) => {
   try {
     const doctors = await Doctor.find({ status: "approved" });
     res.status(200).send({

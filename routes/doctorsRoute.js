@@ -55,7 +55,7 @@ router.post("/update-doctor-profile",authMiddleware, async (req, res) => {
 });
 
 router.get(
-  "/get-appointments-by-doctor-id",authMiddleware,async (req, res) => {
+  "/get-appointments-by-doctor-id",async (req, res) => {
     try {
       const doctor = await Doctor.findOne({ userId: req.body.userId });
       const appointments = await Appointment.find({ doctorId: doctor._id });
