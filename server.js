@@ -2,7 +2,7 @@ const express = require("express");
 var path=require('path')
 const app = express();
 require("dotenv").config();
-const cors = require('cors')a
+const cors = require('cors');
 const multer = require('multer')
 var morgan=require('morgan')
 var rfs=require('rotating-file-stream')
@@ -10,7 +10,7 @@ var Users = require('./models/userModel');
 var Doctor = require('./models/doctorModel');
 const bodyparser = require("body-parser");
 app.use(bodyparser.json());
-app.use(cors);
+app.use(cors());
 const swaggerUi = require('swagger-ui-express')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
