@@ -16,10 +16,8 @@ jobs:
           node-version: 14.x
       - name: Install dependencies
         run: |
-          npm ci --legacy-peer-deps
-          else
-          npm i
-
+          npm i 
+          
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
