@@ -24,7 +24,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.use(express.json());
 
-Users.createIndex({email:1},(err) => {
+const Registers = mongoose.model('Users',Users);
+Registers.createIndex({email:1},(err) => {
   if(err) {
     console.error(err)
   }
@@ -34,7 +35,7 @@ Users.createIndex({email:1},(err) => {
 });
 app.get('/read',async(req,res) => {
   try{
-    const results = await Users.find({}).sort({email:1}).exec();
+    const results = await Registers.find({}).sort({email:1}).exec();
   }
   catch(err){
     res.status(500).send(err);
