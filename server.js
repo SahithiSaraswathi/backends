@@ -21,11 +21,49 @@ const storage = multer.diskStorage({
     cb(null, file.originalname)
   },
 })
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    isDoctor: {
+        type: Boolean,
+        default: false,
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
+    seenNotifications: {
+        type: Array,
+        default: [],
+    },
+    unseenNotifications: {
+        type: Array,
+        default: [],
+    },
+    status : {
+        type: String,
+        default: "approved",
+    }
+}, {
+    timestamps: true
+})
 
 const upload = multer({ storage: storage });
 app.use(express.json());
 
-const Registers = mongoose.model('Users',Users.userSchema);
+const Registers = mongoose.model('users',userSchema);
 Registers.createIndex({email:1},(err) => {
   if(err) {
     console.error(err)
