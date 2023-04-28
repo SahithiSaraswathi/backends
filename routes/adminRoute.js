@@ -4,7 +4,50 @@ const User = require('../models/userModel');
 const Doctor = require('../models/doctorModel');
 const Appointment= require('../models/appointmentModel')
 const authMiddleware = require("../middlewares/authMiddleware");
+const client=require("../config/redis");
+router.get("/get-all-doctors", async (req, res) => {
+  let cachedResult = await client.get("doctors");
+  if(cachedResult) {
+    cachedResult = JSON.parse(cachedResult)
+    res.status(200).send({
+        auth: true,
+        message: "Doctors fetched successfully",
+        success: true,
+        data: cachedResult,
+        fromCache: true,
+    })
+  } else {
+     const doctors = await Doctor.find();
 
+     // Doctor.find({},async(err,results)=>{
+    client.set("doctors",JSON.stringify(doctors))
+     try {
+       // q=results;
+       // res.json({auth:true,results,fromCache:isCached})
+
+       res
+         .status(200)
+         // .json({auth:true,doctors,fromCache: isCached})
+         .send({
+           auth: true,
+           message: "Doctors fetched successfully",
+           success: true,
+           data: doctors,
+           fromCache: false,
+         });
+     } catch (error) {
+       console.log(error);
+       res
+         .status(500)
+         .send({
+           message: "Error applying doctor account",
+           success: false,
+           error,
+         })
+         .json({ auth: false, doctors, fromCache: false });
+     }
+  }
+});
 //  const redis=require('redis')
 // const client = redis.createClient({
 //     password: 'MHNBgRgXXhGxZJ7ymOkBugFhBdUozx38',
@@ -25,17 +68,17 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 
 
-router.get("/get-all-doctors", async (req, res) => {
+// router.get("/get-all-doctors", async (req, res) => {
 
-const doctors=await Doctor.find();
+// const doctors=await Doctor.find();
 
 // Doctor.find({},async(err,results)=>{
 
 
 
-let isCached=false;
-let q;
-    try {
+// let isCached=false;
+// let q;
+//     try {
   
 // q=results;
 // res.json({auth:true,results,fromCache:isCached})
@@ -43,32 +86,32 @@ let q;
 
 
 
-        res
-            .status(200)
-            // .json({auth:true,doctors,fromCache: isCached})
-            .send({
-                auth:true,
-                message: "Doctors fetched successfully",
-                success: true,
-                data: doctors,
-                fromCache:isCached,
-            });
+//         res
+//             .status(200)
+//             // .json({auth:true,doctors,fromCache: isCached})
+//             .send({
+//                 auth:true,
+//                 message: "Doctors fetched successfully",
+//                 success: true,
+//                 data: doctors,
+//                 fromCache:isCached,
+//             });
             
 
-    } catch (error) {
-        console.log(error);
-        res
-            .status(500)
-            .send(
-                {
-                    message: "Error applying doctor account",
-                    success: false,
-                    error,
-                })
-            .json({auth:false,doctors,fromCache:isCached});
+//     } catch (error) {
+//         console.log(error);
+//         res
+//             .status(500)
+//             .send(
+//                 {
+//                     message: "Error applying doctor account",
+//                     success: false,
+//                     error,
+//                 })
+//             .json({auth:false,doctors,fromCache:isCached});
 
-    }
-});
+//     }
+// });
 
 
 router.get("/get-all-appointments", async (req, res) => {
