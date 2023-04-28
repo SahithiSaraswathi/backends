@@ -16,11 +16,11 @@ jobs:
           node-version: 14.x
       - name: Install dependencies
         run: |
-          cd Server
+          cd server
           npm ci --legacy-peer-deps
       - name: Run tests
         run: |
-          cd Server
+          cd server
           npm test
     
   build-and-deploy:
