@@ -7,15 +7,33 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/get-all-doctors", async (req, res) => {
 
+const doctors=await Doctor.find();
+
+// Doctor.find({},async(err,results)=>{
+
+
+
+let isCached=false;
+let q;
     try {
-        const doctors = await Doctor.find({});
+  
+// q=results;
+// res.json({auth:true,results,fromCache:isCached})
+
+
+
+
         res
             .status(200)
+            // .json({auth:true,doctors,fromCache: isCached})
             .send({
+                auth:true,
                 message: "Doctors fetched successfully",
                 success: true,
                 data: doctors,
+                fromCache:isCached,
             });
+            
 
     } catch (error) {
         console.log(error);
@@ -26,9 +44,12 @@ router.get("/get-all-doctors", async (req, res) => {
                     message: "Error applying doctor account",
                     success: false,
                     error,
-                });
+                })
+            .json({auth:false,doctors,fromCache:isCached});
+
     }
 });
+
 
 router.get("/get-all-appointments", async (req, res) => {
 
