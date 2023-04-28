@@ -21,8 +21,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname)
   },
 })
-const mongoose = require('mongoose');
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
