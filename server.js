@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.use(express.json());
 
-const Registers = mongoose.model('Users',Users);
+const Registers = mongoose.model('Users',Users.userSchema);
 Registers.createIndex({email:1},(err) => {
   if(err) {
     console.error(err)
