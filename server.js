@@ -24,8 +24,22 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.use(express.json());
 
-
-
+Users.createIndex({email:1},(err) => {
+  if(err) {
+    console.error(err)
+  }
+  else{
+    console.log('Index created on email field');
+  }
+});
+app.get('/read',async(req,res) => {
+  try{
+    const results = await Users.find({}).sort({email:1}).exec();
+  }
+  catch(err){
+    res.status(500).send(err);
+  }
+});
 
 app.get('/',(req,res)=>{
   res.send('Welcome to mongo db')
